@@ -1,43 +1,20 @@
-/***********************************************************************
-// Intro. to Object Oriented Programming
-// Workshop 8
-// Version 1.0
-// Description
-// tester program
-//
-// Revision History
-// -----------------------------------------------------------
-// Name            Date            Reason
-//Ji Ho Nam     July 19,2023
-/////////////////////////////////////////////////////////////////
-***********************************************************************/
 #include <iostream>
-#include "LblShape.h"
-#include "Utils.h"
-#include <string>
 #include <cstring>
-using namespace std;
+#include "LblShape.h"
+
 namespace sdds
 {
-    const char *LblShape::label() const
+    LblShape::LblShape()
     {
-        return m_label;
+        m_label = nullptr;
     }
 
-    // LblShape::LblShape()
-    // {
-    //    if (m_label != nullptr)
-    //    {
-    //         m_label = nullptr;
-    //      }
-    //    }
-
-    LblShape::LblShape(const char *chr)
+    LblShape::LblShape(const char *label)
     {
-        if (chr && chr[0] != '\0')
+        if (label)
         {
-            m_label = new char[strlen(chr) + 1];
-            strcpy(m_label, chr);
+            m_label = new char[strlen(label) + 1];
+            strcpy(m_label, label);
         }
     }
 
@@ -52,12 +29,29 @@ namespace sdds
 
     void LblShape::getSpecs(std::istream &is)
     {
-        string buf;
-        getline(is, buf, ',');
+        // Read label from istream up to ',' character
+        delete[] m_label; // Release any existing memory
+        m_label = nullptr;
 
-        delete[] m_label;
-        m_label = new char[strlen(buf.c_str()) + 1];
-        strcpy(m_label, buf.c_str());
+        char comma;
+        is >> std::ws; // Skip whitespace
+        if (is.peek() != ',')
+        {
+            char buffer[1000]; // Adjust buffer size as needed
+            is.get(buffer, sizeof(buffer), ',');
+            is >> comma;
+            m_label = new char[strlen(buffer) + 1];
+            strcpy(m_label, buffer);
+        }
+        else
+        {
+            is >> comma; // Consume the comma if there's no label
+        }
+    }
+
+    const char *LblShape::label() const
+    {
+        return m_label;
     }
 
 }

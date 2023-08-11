@@ -1,37 +1,27 @@
-/***********************************************************************
-// Intro. to Object Oriented Programming
-// Workshop 8
-// Version 1.0
-// Description
-// tester program
-//
-// Revision History
-// -----------------------------------------------------------
-// Name            Date            Reason
-//Ji Ho Nam     July 19,2023
-/////////////////////////////////////////////////////////////////
-***********************************************************************/
 #include <iostream>
-#include "Rectangle.h"
-#include "Utils.h"
 #include <cstring>
+#include "Rectangle.h"
 
 namespace sdds
 {
-    //  Rectangle::Rectangle()
-    //   {
-    //       m_height = 0;
-    //       m_width = 0;
-    //   }
+    Rectangle::Rectangle()
+    {
+        m_height = 0;
+        m_width = 0;
+    }
 
     Rectangle::Rectangle(const char *lbl, int width, int height) : LblShape(lbl)
     {
-        int wid = strlen(LblShape::label()) + 2;
-
-        if (width > wid && height > 3)
+        int wid = strlen(label()) + 2;
+        if (height < 3 || m_width < wid)
         {
-            m_width = width;
+            m_height = 0;
+            m_width = 0;
+        }
+        else
+        {
             m_height = height;
+            m_width = width;
         }
     }
 
@@ -39,28 +29,27 @@ namespace sdds
     {
         int width;
         int height;
-        char _comma;
-        bool result = false;
+        char temp;
+        bool ret = false;
 
         do
         {
-
             LblShape::getSpecs(is);
-            is >> width >> _comma >> height;
+            is >> width >> temp >> height;
 
             if (!is)
             {
                 is.clear();
-                is.ignore(1000, '\n');
+                is.ignore('\n');
             }
             else
             {
                 is.ignore();
-                m_width = width;
                 m_height = height;
-                result = true;
+                m_width = width;
+                ret = true;
             }
-        } while (!result);
+        } while (!ret);
     }
 
     void Rectangle::draw(std::ostream &os) const
@@ -77,7 +66,7 @@ namespace sdds
             os << '|';
             os.width(m_width - 2);
             os.fill(' ');
-            os << std::left << LblShape::label() << '|' << std::endl;
+            os << std::left << label() << '|' << std::endl;
 
             for (int i = 0; i < (m_height - 3); i++)
             {

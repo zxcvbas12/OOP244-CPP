@@ -1,27 +1,15 @@
-/***********************************************************************
-// Intro. to Object Oriented Programming
-// Workshop 8
-// Version 1.0
-// Description
-// tester program
-//
-// Revision History
-// -----------------------------------------------------------
-// Name            Date            Reason
-//Ji Ho Nam     July 19,2023
-/////////////////////////////////////////////////////////////////
-***********************************************************************/
 #include <iostream>
+#include <cstring>
 #include "Line.h"
 
 namespace sdds
 {
-    //   Line::Line()
-    //   {
-    //       m_length = 0;
-    //   }
+    Line::Line()
+    {
+        m_length = 0;
+    }
 
-    Line::Line(const char *lbl, int length) : LblShape(lbl)
+    Line::Line(const char *chr, int length) : LblShape(chr)
     {
         if (length > 0)
         {
@@ -32,36 +20,36 @@ namespace sdds
     void Line::getSpecs(std::istream &is)
     {
         int length;
-        bool result = false;
-
+        bool ret = true;
         do
         {
             LblShape::getSpecs(is);
-
-            is >> length;
+            is >> m_length;
 
             if (!is)
             {
                 is.clear();
-                is.ignore(1000, '\n');
+                is.ignore('\n');
             }
             else
             {
                 is.ignore();
                 m_length = length;
-                result = true;
+                ret = true;
             }
-        } while (!result);
+        } while (!ret);
     }
 
     void Line::draw(std::ostream &os) const
     {
-        if (m_length > 0 && LblShape::label())
+        if (m_length > 0 && label())
         {
-            os << LblShape::label() << std::endl;
-            os.width(m_length);
-            os.fill('=');
-            os << '=';
+            os << label() << std::endl;
+
+            for (int i = 0; i < m_length; i++)
+            {
+                os << "=";
+            }
         }
     }
 }
