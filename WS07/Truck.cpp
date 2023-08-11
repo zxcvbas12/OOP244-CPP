@@ -1,72 +1,47 @@
-/*/////////////////////////////////////////////////////////////////////////
-                          Workshop - #7 (P1)
-Full Name  : Ji Ho Nam
-Student ID#: 139817217
-Email      : jhnam@myseneca.ca
-Section    : OOP244NEE
-Date       : Jul 12. 2023
-
-Authenticity Declaration:
-I declare this submission is the result of my own work and has not been
-shared with any other student or 3rd party content provider. This submitted
-piece of work is entirely of my own creation.
-/////////////////////////////////////////////////////////////////////////*/
 #include <iostream>
-#include <iomanip>
-#include "cstring.h"
 #include "Truck.h"
 
 namespace sdds
 {
-    /* Truck::Truck(const char *plate, int year, double truckCapacity, const char *address)
-     {
-         setPlate(plate);
-         setBuilt(year);
-         moveTo(address);
-         currentCargo = 0;
-         capacity = truckCapacity;
-     }*/
-
-    Truck::Truck(const char *plate, int year, double truckCapacity, const char *address)
-        : MotorVehicle(plate, year), capacity(truckCapacity), currentCargo(0)
+    Truck::Truck(const char *num, int year, double cap, const char *add) : MotorVehicle(num, year)
     {
-        moveTo(address);
+        capacity = cap;
+        current_cargo_load = 0.0;
+        moveTo(add);
     }
 
     bool Truck::addCargo(double cargo)
     {
-        bool result = false;
-        if (currentCargo != capacity)
+        bool ret = false;
+
+        if (current_cargo_load != capacity)
         {
-            currentCargo += cargo;
-            if (currentCargo > capacity)
+            current_cargo_load += cargo;
+            if (current_cargo_load > capacity)
             {
-                currentCargo = capacity;
+                current_cargo_load = capacity;
             }
-            result = true;
+            ret = true;
         }
-
-        return result;
+        return ret;
     }
-
     bool Truck::unloadCargo()
     {
-        bool result = false;
+        bool ret = false;
 
-        if (currentCargo != 0)
+        if (current_cargo_load != 0.0)
         {
-            currentCargo = 0;
-            result = true;
+            current_cargo_load = 0.0;
+            ret = true;
         }
 
-        return result;
+        return ret;
     }
 
     std::ostream &Truck::write(std::ostream &os) const
     {
         MotorVehicle::write(os);
-        os << " | " << currentCargo << "/" << capacity;
-
+        os << " | " << current_cargo_load << "/" << capacity;
         return os;
     }
 
@@ -76,18 +51,19 @@ namespace sdds
         std::cout << "Capacity: ";
         in >> capacity;
         std::cout << "Cargo: ";
-        in >> currentCargo;
+        in >> current_cargo_load;
         return in;
     }
 
     std::ostream &operator<<(std::ostream &os, const Truck &truck)
     {
-        return truck.write(os);
+        truck.write(os);
+        return os;
     }
 
-    std::istream &operator>>(std::istream &in, Truck &truck)
+    std::istream &operator>>(std::istream &is, Truck &truck)
     {
-        return truck.read(in);
+        truck.read(is);
+        return is;
     }
-
 }
